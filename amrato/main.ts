@@ -1,11 +1,30 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
 import * as url from "url";
+import * as windowStateKeeper from "electron-window-state";
 
 let win: BrowserWindow;
 
 function createWindow() {
-    win = new BrowserWindow({ width: 800, height: 600 });
+
+    const mainWindowState = windowStateKeeper({
+        defaultWidth: 800,
+        defaultHeight: 600
+    });
+
+    win = new BrowserWindow({
+        x: mainWindowState.x,
+        y: mainWindowState.y,
+        width: mainWindowState.width,
+        height: mainWindowState.height,
+        fullscreen: mainWindowState.isFullScreen
+    });
+
+    if (mainWindowState.isMaximized) {
+        win.maximize();
+    }
+
+    mainWindowState.manage(win);
 
     // load the dist folder from Angular
     win.loadURL(

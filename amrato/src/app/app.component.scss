@@ -1,0 +1,19 @@
+.w-screen {
+    width: 100vw;
+}
+
+.h-screen {
+    height: 100vh;
+}
+
+mat-drawer {
+    min-width: 15rem;
+
+    mat-icon {
+        margin-right: 1rem;
+    }
+}
+
+section#main {
+    padding: 1rem;
+}
