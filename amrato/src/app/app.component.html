@@ -5,6 +5,10 @@
                 <mat-icon>home</mat-icon>
                 Home
             </a>
+            <a mat-list-item routerLink="/band-plan" routerLinkActive="active">
+                <mat-icon>line_style</mat-icon>
+                Band Plan
+            </a>
             <a mat-list-item routerLink="/map" routerLinkActive="active">
                 <mat-icon>map</mat-icon>
                 World Map
@@ -12,11 +16,16 @@
         </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>
-        <mat-toolbar class="sticky pin-x pin-t" color="primary">
-            <button type="button" mat-icon-button (click)="drawer.toggle()">
-                <mat-icon>menu</mat-icon>
-            </button>
-            Amrato v{{version}}
+        <mat-toolbar class="d-flex sticky pin-x pin-t" color="primary">
+            <div class="flex-left">
+                <button type="button" mat-icon-button (click)="drawer.toggle()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                Amrato v{{version}}
+            </div>
+            <div class="flex-right">
+                {{datetime}}
+            </div>
         </mat-toolbar>
         <section id="main">
             <router-outlet></router-outlet>

@@ -17,7 +17,10 @@ function createWindow() {
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
-        fullscreen: mainWindowState.isFullScreen
+        fullscreen: mainWindowState.isFullScreen,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     if (mainWindowState.isMaximized) {

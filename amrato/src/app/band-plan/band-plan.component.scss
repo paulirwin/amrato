@@ -1,0 +1,56 @@
+mat-card {
+    margin-bottom: 1rem;
+}
+
+.utc-notice, .band-note {
+    font-size: 0.8rem;
+    margin: 0 1rem 1rem 1rem;
+}
+
+table.high-freq-table {
+    margin-left: 1rem;
+
+    td {
+        padding: 0.5rem;
+    }
+}
+
+.split-view {
+    display: flex;
+
+    .band-list-cards {
+        flex: 1 auto;
+        margin-right: 1rem;
+    }
+
+    .band-legend {
+        width: 20rem;
+
+        mat-card-content {
+            padding: 1rem;
+        }
+    }
+}
+
+.type-legend {
+    dt {
+        display: block;
+        height: 1rem;
+        width: 1.5rem;
+        border: solid 1px black;
+        float: left;
+        margin-bottom: 0.5rem;
+    }
+    dd {
+        margin-bottom: 0.5rem;
+    }
+}
+
+.license-legend {
+    margin-top: 1rem;
+    
+    dt {
+        float: left;
+        font-weight: bold;
+    }
+}

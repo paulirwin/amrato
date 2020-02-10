@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import * as moment from "moment";
+
 import { version } from "../../package.json";
 
 @Component({
@@ -6,7 +8,16 @@ import { version } from "../../package.json";
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     title = 'Amrato';
     version = version;
+    datetime: string;
+
+    ngOnInit() {
+        setInterval(this.updateDateTime.bind(this), 1000);
+    }
+
+    updateDateTime() {
+        this.datetime = moment.utc().format("YYYY-MM-DD HH:mm UTC");
+    }
 }

@@ -1,0 +1,110 @@
+<h2>ARRL Band Plan</h2>
+<div class="split-view">
+    <div class="band-list-cards">
+        <mat-card *ngFor="let band of bands">
+            <mat-card-header>
+                <mat-card-title>{{band.displayName}}</mat-card-title>
+                <mat-card-subtitle *ngIf="band.startFreqMhz < 1">{{(band.startFreqMhz * 1000)}} -
+                    {{(band.endFreqMhz * 1000)}} kHz</mat-card-subtitle>
+                <mat-card-subtitle *ngIf="band.startFreqMhz >= 1 && band.startFreqMhz < 1000">{{band.startFreqMhz}} -
+                    {{band.endFreqMhz}} MHz</mat-card-subtitle>
+                <mat-card-subtitle *ngIf="band.startFreqMhz >= 1000">{{band.startFreqMhz / 1000}} -
+                    {{band.endFreqMhz / 1000}} GHz</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p *ngIf="band.requiresUtcRegistration" class="utc-notice">Amateurs wishing to operate on either 2,200
+                    or
+                    630 meters must first register with the Utilities Technology Council online at <a
+                        href="https://utc.org/plc-database-amateur-notification-process/"
+                        (click)="openUrlInBrowser($event)">this link</a>. You need only register once for each band.</p>
+                <p *ngIf="band.note" class="band-note">{{band.note}}</p>
+
+                <app-stacked-band *ngIf="band.segments.length > 0 && band.displayMode === 'stacked-band'" [band]="band">
+                </app-stacked-band>
+            </mat-card-content>
+        </mat-card>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Over 2.3 GHz</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p class="band-note">Geographical and power restrictions may apply to all bands above 420 MHz. See
+                    <em>The
+                        ARRL Operating Manual</em> for information about your area.</p>
+                <p class="band-note">All licensees except Novices are authorized all modes on the following frequencies:
+                </p>
+
+                <table class="high-freq-table">
+                    <tr>
+                        <td>2300-2310 MHz</td>
+                        <td>10.0-10.5 GHz &Dagger;</td>
+                        <td>122.25-123.0 GHz</td>
+                    </tr>
+                    <tr>
+                        <td>2390-2450 MHz</td>
+                        <td>24.0-24.25 GHz</td>
+                        <td>134-141 GHz</td>
+                    </tr>
+                    <tr>
+                        <td>3300-3500 MHz</td>
+                        <td>47.0-47.2 GHz</td>
+                        <td>241-250 GHz</td>
+                    </tr>
+                    <tr>
+                        <td>5650-5925 MHz</td>
+                        <td>76.0-81.0 GHz</td>
+                        <td>All above 275 GHz</td>
+                    </tr>
+                </table>
+                <p class="band-note">&Dagger; No pulse emissions</p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="band-legend">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Key</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>
+                    <em><strong>Note:</strong></em><br />
+                    CW operation is permitted throughout all amateur bands.
+                </p>
+                <p>
+                    MCW is authorized above 50.1 MHz, except for 144.0-144.1 and 219-220 MHz.
+                </p>
+                <p>
+                    Test transmissions are authorized above 51 MHz, except for 219-220 MHz
+                </p>
+
+                <dl class="type-legend">
+                    <dt class="band-plan-key rtty-data"></dt>
+                    <dd>RTTY and data</dd>
+                    <dt class="band-plan-key phone-image"></dt>
+                    <dd>phone and image</dd>
+                    <dt class="band-plan-key cw-only"></dt>
+                    <dd>CW <em>only</em></dd>
+                    <dt class="band-plan-key ssb-phone"></dt>
+                    <dd>SSB phone</dd>
+                    <dt class="band-plan-key usb-cw-rtty-data"></dt>
+                    <dd>USB phone, CW, RTTY, and data</dd>
+                    <dt class="band-plan-key fixed-digital"></dt>
+                    <dd>Fixed digital message forwarding systems <em>only</em></dd>
+                </dl>
+
+                <dl class="license-legend">
+                    <dt>E</dt>
+                    <dd>Amateur Extra</dd>
+                    <dt>A</dt>
+                    <dd>Advanced</dd>
+                    <dt>G</dt>
+                    <dd>General</dd>
+                    <dt>T</dt>
+                    <dd>Technician</dd>
+                    <dt>N</dt>
+                    <dd>Novice</dd>
+                </dl>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="band-plan-graphic stacked-band">
+    <div class="top-freq-indicator" *ngIf="hasCwOnlySection">
+        <span class="cw-end-freq">{{cwEndFreqString}}</span>
+        <span class="cw-end-line"></span>
+    </div>
+    <div class="indicator-bottom">
+        <div class="band-row">
+            <div class="band-row-segments" [ngStyle]="{'height': (segmentStackedRows.length + 1) + 'rem' }">
+                <div class="band-plan-key cw-only" *ngIf="hasCwOnlySection" title="CW only" [ngStyle]="{'height': (segmentStackedRows.length) + 'rem' }"></div>
+                <div class="band-stacked-row band-plan-key" *ngFor="let segment of segmentStackedRows" [ngClass]="segment.type" [title]="bandPlanService.segmentTypeLegend[segment.type]">
+                    <span *ngIf="band.pepMaxWatts" class="pep-max-watts">{{band.pepMaxWatts}} Watts PEP</span>
+                </div>
+            </div>
+            <div class="license-classes">{{licenseClassString}}</div>
+        </div>
+    </div>
+    <div class="freq-indicators">
+        <span class="start-freq">{{startFreqString}}</span>
+        <span class="power-limit">{{eirpMaxWattsString}}</span>
+        <span class="end-freq">{{endFreqString}}</span>
+    </div>
+    <p *ngIf="band.eirpMaxWattsNote" class="eirp-note">* {{band.eirpMaxWattsNote}}</p>
+</div>
