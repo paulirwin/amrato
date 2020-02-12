@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GridCodeService } from '../services/grid-code.service';
+import { MapViewComponent } from '../map-view/map-view.component';
 
 @Component({
     selector: 'app-map',
@@ -9,6 +10,7 @@ import { GridCodeService } from '../services/grid-code.service';
 export class MapComponent implements OnInit {
 
     gridCode: string = "";
+    @ViewChild("mapView") mapView: MapViewComponent;
 
     constructor(private gridCodeService: GridCodeService) { }
 
@@ -20,6 +22,6 @@ export class MapComponent implements OnInit {
         
         const coords = this.gridCodeService.convertGridCodeToCoordinates(this.gridCode);
 
-        alert(coords.longitude.toString() + " " + coords.latitude.toString());
+        this.mapView.setCenter(coords.longitude.toDecimal(), coords.latitude.toDecimal());
     }    
 }

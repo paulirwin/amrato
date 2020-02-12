@@ -15,7 +15,7 @@ export class DegreesMinutes {
 
     static fromDecimal(decimal: number, isLongitude: boolean): DegreesMinutes {
         const deg = Math.trunc(decimal);
-        const min = (decimal - deg) * 60;
+        const min = Math.abs((decimal - deg) * 60);
         
         return new DegreesMinutes(deg, min, isLongitude);
     }

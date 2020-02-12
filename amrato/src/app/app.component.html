@@ -15,8 +15,8 @@
             </a>
         </mat-nav-list>
     </mat-drawer>
-    <mat-drawer-content>
-        <mat-toolbar class="d-flex sticky pin-x pin-t" color="primary">
+    <mat-drawer-content fxLayout="column" fxFlexFill>
+        <mat-toolbar class="d-flex sticky pin-x pin-t" color="primary" fxFlex="64px">
             <div class="flex-left">
                 <button type="button" mat-icon-button (click)="drawer.toggle()">
                     <mat-icon>menu</mat-icon>
@@ -27,8 +27,8 @@
                 {{datetime}}
             </div>
         </mat-toolbar>
-        <section id="main">
-            <router-outlet></router-outlet>
+        <section id="main" fxFlex>
+            <router-outlet class="hidden-router"></router-outlet>
         </section>
     </mat-drawer-content>
 </mat-drawer-container>

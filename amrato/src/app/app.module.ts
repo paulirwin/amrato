@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -21,6 +22,7 @@ import { HomeComponent } from './home/home.component';
 import { MapComponent } from './map/map.component';
 import { BandPlanComponent } from './band-plan/band-plan.component';
 import { StackedBandComponent } from './band-plan/stacked-band/stacked-band.component';
+import { MapViewComponent } from './map-view/map-view.component';
 
 @NgModule({
     declarations: [
@@ -28,7 +30,8 @@ import { StackedBandComponent } from './band-plan/stacked-band/stacked-band.comp
         HomeComponent,
         MapComponent,
         BandPlanComponent,
-        StackedBandComponent
+        StackedBandComponent,
+        MapViewComponent
     ],
     imports: [
         NgxElectronModule,
@@ -37,6 +40,7 @@ import { StackedBandComponent } from './band-plan/stacked-band/stacked-band.comp
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
+        FlexLayoutModule,
         MatSidenavModule,
         MatToolbarModule,
         MatIconModule,
