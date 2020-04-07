@@ -23,6 +23,7 @@ import { MapComponent } from './map/map.component';
 import { BandPlanComponent } from './band-plan/band-plan.component';
 import { StackedBandComponent } from './band-plan/stacked-band/stacked-band.component';
 import { MapViewComponent } from './map-view/map-view.component';
+import { WsjtxComponent } from './wsjtx/wsjtx.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { MapViewComponent } from './map-view/map-view.component';
         MapComponent,
         BandPlanComponent,
         StackedBandComponent,
-        MapViewComponent
+        MapViewComponent,
+        WsjtxComponent
     ],
     imports: [
         NgxElectronModule,

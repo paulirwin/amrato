@@ -1,0 +1,22 @@
+<h2>WSJT-X Companion</h2>
+<p>
+    <span [class.disconnected]="status === 'disconnected'" [class.listening]="status === 'listening'" [class.connected]="status === 'connected'" class="status-badge"></span>
+    {{statusString}}
+</p>
+
+<table class="table" *ngIf="status === 'connected'">
+    <thead>
+        <tr>
+            <th>UTC Time</th>
+            <th>dB</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let message of messages" [class.isCQ]="message.isCQ">
+            <td>{{message.timeString}}</td>
+            <td>{{message.snr.toFixed(0)}}</td>
+            <td>{{message.message}}</td>
+        </tr>
+    </tbody>
+</table>
