@@ -1,1 +1,4 @@
-<p>Home</p>
+
+<div *ngIf="needsSetup" class="first-run-alert">
+    <strong>Welcome to Amrato!</strong> Head over to <a routerLink="/settings">Settings</a> to set up your callsign.
+</div>

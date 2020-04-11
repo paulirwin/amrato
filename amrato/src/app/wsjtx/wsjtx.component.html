@@ -6,18 +6,26 @@
     </p>
 </div>
 
+<div class="filters">
+    <mat-checkbox [(ngModel)]="cqOnly">CQ Only</mat-checkbox>
+</div>
+
 <table class="table" *ngIf="status === 'connected'">
     <thead>
         <tr>
             <th>UTC Time</th>
             <th>dB</th>
+            <th>DT</th>
+            <th>Freq</th>
             <th>Message</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let message of messages" [class.isCQ]="message.isCQ">
+        <tr *ngFor="let message of filteredMessages" [class.isCQ]="message.isCQ" [class.isMyCall]="message.toCall === mycall">
             <td>{{message.timeString}}</td>
             <td>{{message.snr.toFixed(0)}}</td>
+            <td>{{message.deltaTime.toFixed(1)}}</td>
+            <td>{{message.deltaFrequency.toFixed(0)}}</td>
             <td>{{message.message}}</td>
         </tr>
     </tbody>

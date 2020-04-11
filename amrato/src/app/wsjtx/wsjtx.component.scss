@@ -19,8 +19,20 @@
     }
 }
 
+.filters {
+    padding: 1rem;
+}
+
 tr.isCQ {
     background-color: #1EB2A6;
+}
+
+tr.isMyCall {
+    background-color: #FFA34D;
+}
+
+td {
+    padding: 0.5rem;
 }
 
 .control-bar {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsService } from '../services/settings.service';
 
 @Component({
     selector: 'app-home',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-    constructor() { }
+    needsSetup = false;
+
+    constructor(private settingsService: SettingsService) { }
 
     ngOnInit(): void {
+        if (!this.settingsService.callsign) {
+            this.needsSetup = true;
+        }
     }
 
 }

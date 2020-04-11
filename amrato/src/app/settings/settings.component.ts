@@ -18,7 +18,7 @@ export class SettingsComponent implements OnInit {
     }
 
     saveSettings(e: Event) {
-        alert("callsign: " + this.callsign);
+        this.settingsService.callsign = this.callsign;
     }
 
 }

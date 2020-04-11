@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Socket } from 'dgram';
 import * as moment from "moment";
@@ -6,6 +6,7 @@ import MessageParser from './messages/MessageParser';
 import HeartbeatMessage from './messages/HeartbeatMessage';
 import { MessageType } from './messages/MessageType';
 import DecodeMessage from './messages/DecodeMessage';
+import { SettingsService } from '../services/settings.service';
 
 enum ListenerStatus {
     Disconnected = "disconnected",
@@ -18,20 +19,27 @@ enum ListenerStatus {
     templateUrl: './wsjtx.component.html',
     styleUrls: ['./wsjtx.component.scss']
 })
-export class WsjtxComponent implements OnInit {
+export class WsjtxComponent implements OnInit, OnDestroy {
 
+    socket: Socket;
     status: ListenerStatus = ListenerStatus.Disconnected;
     lastSeen: Date;
     lastHeartbeat: HeartbeatMessage = null;
 
+    mycall: string;
+    cqOnly: boolean = false;
+
     messages: DecodeMessage[] = [];
 
-    constructor(private electronService: ElectronService) { }
+    constructor(private electronService: ElectronService, settingsService: SettingsService) { 
+        this.mycall = settingsService.callsign;
+    }
 
     ngOnInit(): void {
         const dgram = this.electronService.remote.require("dgram");
 
         const socket: Socket = dgram.createSocket("udp4");
+        this.socket = socket;
         
         socket.on('message', (msg, rinfo) => {
             if (msg.length < 4) {
@@ -77,11 +85,26 @@ export class WsjtxComponent implements OnInit {
         setInterval(this.checkLastSeen.bind(this), 5000);
     }
 
+    ngOnDestroy() {
+        if (this.socket) {
+            this.socket.close();
+            this.socket = null;
+        }
+    }
+
     checkLastSeen() {
         const now = new Date();
         if (this.lastSeen && this.lastSeen < moment(now).subtract(30, 'seconds').toDate()) {
             this.status = ListenerStatus.Listening;
         }
+    }
+
+    get filteredMessages() {
+        if (this.cqOnly) {
+            return this.messages.filter(i => i.isCQ);
+        }
+
+        return this.messages;
     }
 
     get statusString() {
