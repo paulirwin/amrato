@@ -14,4 +14,12 @@ export class SettingsService {
     set callsign(value: string) {
         localStorage.setItem("callsign", value);
     }
+
+    get gridCode(): string {
+        return localStorage.getItem("gridCode");
+    }
+
+    set gridCode(value: string) {
+        localStorage.setItem("gridCode", value);
+    }
 }

@@ -9,9 +9,11 @@ import { SettingsService } from '../services/settings.service';
 export class SettingsComponent implements OnInit {
 
     public callsign: string;
+    public gridCode: string;
 
     constructor(private settingsService: SettingsService) { 
         this.callsign = settingsService.callsign;
+        this.gridCode = settingsService.gridCode;
     }
 
     ngOnInit(): void {
@@ -19,6 +21,7 @@ export class SettingsComponent implements OnInit {
 
     saveSettings(e: Event) {
         this.settingsService.callsign = this.callsign;
+        this.settingsService.gridCode = this.gridCode;
     }
 
 }

@@ -37,4 +37,18 @@ export class GridCodeService {
         
         return new Coordinates(DegreesMinutes.fromDecimal(lon, true), DegreesMinutes.fromDecimal(lat, false));
     }
+
+    computeDistanceKm(fromGridCode: string, toGridCode: string): number {
+        const from = Maidenhead.fromLocator(fromGridCode);
+        const to = Maidenhead.fromLocator(toGridCode);
+
+        return from.distanceTo(to, "km");
+    }
+
+    computeAzimuth(fromGridCode: string, toGridCode: string): number {
+        const from = Maidenhead.fromLocator(fromGridCode);
+        const to = Maidenhead.fromLocator(toGridCode);
+
+        return from.bearingTo(to);
+    }
 }

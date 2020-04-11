@@ -6,9 +6,10 @@ import * as moment from "moment";
 import MessageParser from './messages/MessageParser';
 import HeartbeatMessage from './messages/HeartbeatMessage';
 import { MessageType } from './messages/MessageType';
-import DecodeMessage from './messages/DecodeMessage';
+import DecodeMessage, { DecodeMessageDataType } from './messages/DecodeMessage';
 import { SettingsService } from '../services/settings.service';
 import { LotwService } from '../services/lotw.service';
+import { GridCodeService } from '../services/grid-code.service';
 
 enum ListenerStatus {
     Disconnected = "disconnected",
@@ -29,12 +30,17 @@ export class WsjtxComponent implements OnInit, OnDestroy {
     lastHeartbeat: HeartbeatMessage = null;
 
     mycall: string;
+    mygrid: string;
     cqOnly: boolean = false;
 
     messages: DecodeMessage[] = [];
 
-    constructor(private electronService: ElectronService, settingsService: SettingsService, private lotwService: LotwService) { 
+    constructor(private electronService: ElectronService, 
+        settingsService: SettingsService, 
+        private lotwService: LotwService,
+        private gridCodeService: GridCodeService) { 
         this.mycall = settingsService.callsign;
+        this.mygrid = settingsService.gridCode;
     }
 
     async ngOnInit() {
@@ -118,6 +124,26 @@ export class WsjtxComponent implements OnInit, OnDestroy {
             ? moment.utc(message.lastLotwActivity).toDate() > moment.utc().subtract(1, "year").toDate() 
             : false;
     }
+
+    computeDistanceKm(message: DecodeMessage): string {
+        if (!this.mygrid || message?.data?.type !== DecodeMessageDataType.GridCode) {
+            return null;
+        }
+
+        const dist = this.gridCodeService.computeDistanceKm(this.mygrid, message.data.value as string);
+
+        return dist.toFixed(0) + " km";
+    }
+
+    computeAzimuth(message: DecodeMessage): string {
+        if (!this.mygrid || message?.data?.type !== DecodeMessageDataType.GridCode) {
+            return null;
+        }
+
+        const az = this.gridCodeService.computeAzimuth(this.mygrid, message.data.value as string);
+
+        return az.toFixed(0) + "°";
+     }
 
     get filteredMessages() {
         if (this.cqOnly) {

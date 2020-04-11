@@ -18,6 +18,8 @@
             <th>DT</th>
             <th>Freq</th>
             <th>Message</th>
+            <th>Distance</th>
+            <th>Azimuth</th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +32,8 @@
             <td>{{message.deltaTime.toFixed(1)}}</td>
             <td>{{message.deltaFrequency.toFixed(0)}}</td>
             <td>{{message.message}}</td>
+            <td>{{computeDistanceKm(message)}}</td>
+            <td>{{computeAzimuth(message)}}</td>
         </tr>
     </tbody>
 </table>
