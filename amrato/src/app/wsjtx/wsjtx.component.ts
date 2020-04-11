@@ -10,6 +10,7 @@ import DecodeMessage, { DecodeMessageDataType } from './messages/DecodeMessage';
 import { SettingsService } from '../services/settings.service';
 import { LotwService } from '../services/lotw.service';
 import { GridCodeService } from '../services/grid-code.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 enum ListenerStatus {
     Disconnected = "disconnected",
@@ -31,26 +32,31 @@ export class WsjtxComponent implements OnInit, OnDestroy {
 
     mycall: string;
     mygrid: string;
-    cqOnly: boolean = false;
+    private _cqOnly: boolean = false;
 
     messages: DecodeMessage[] = [];
+    dataSource = new MatTableDataSource<DecodeMessage>();
 
-    constructor(private electronService: ElectronService, 
-        settingsService: SettingsService, 
+    displayedColumns = ["timeString", "snr", "deltaTime", "deltaFrequency", "message", "distance", "azimuth", "tags"];
+
+    constructor(private electronService: ElectronService,
+        settingsService: SettingsService,
         private lotwService: LotwService,
-        private gridCodeService: GridCodeService) { 
+        private gridCodeService: GridCodeService) {
         this.mycall = settingsService.callsign;
         this.mygrid = settingsService.gridCode;
     }
 
     async ngOnInit() {
-        this.lotwService.initialize();        
+        this.dataSource.filterPredicate = (data, filter) => !this.cqOnly || data.isCQ;        
+
+        this.lotwService.initialize();
 
         const dgram = this.electronService.remote.require("dgram");
 
         const socket: Socket = dgram.createSocket("udp4");
         this.socket = socket;
-        
+
         socket.on('message', async (msg, rinfo) => {
             if (msg.length < 4) {
                 return;
@@ -81,6 +87,7 @@ export class WsjtxComponent implements OnInit, OnDestroy {
                     const decodeMessage = message as DecodeMessage;
                     decodeMessage.lastLotwActivity = await this.lastLotwActivity(decodeMessage);
                     this.messages.splice(0, 0, decodeMessage);
+                    this.dataSource.data = this.messages;
                 }
             } else {
                 console.log("Unhandled WSJT-X Message", msg);
@@ -120,8 +127,8 @@ export class WsjtxComponent implements OnInit, OnDestroy {
     }
 
     hasLotwActivity(message: DecodeMessage): boolean {
-        return message.lastLotwActivity 
-            ? moment.utc(message.lastLotwActivity).toDate() > moment.utc().subtract(1, "year").toDate() 
+        return message.lastLotwActivity
+            ? moment.utc(message.lastLotwActivity).toDate() > moment.utc().subtract(1, "year").toDate()
             : false;
     }
 
@@ -143,14 +150,6 @@ export class WsjtxComponent implements OnInit, OnDestroy {
         const az = this.gridCodeService.computeAzimuth(this.mygrid, message.data.value as string);
 
         return az.toFixed(0) + "°";
-     }
-
-    get filteredMessages() {
-        if (this.cqOnly) {
-            return this.messages.filter(i => i.isCQ);
-        }
-
-        return this.messages;
     }
 
     get statusString() {
@@ -166,5 +165,14 @@ export class WsjtxComponent implements OnInit, OnDestroy {
             case ListenerStatus.Listening:
                 return "Waiting for UDP packets from WSJT-X...";
         }
+    }
+
+    get cqOnly() {
+        return this._cqOnly;
+    }
+
+    set cqOnly(value: boolean) {
+        this._cqOnly = value;
+        this.dataSource.filter = value ? "cqOnly" : "";
     }
 }

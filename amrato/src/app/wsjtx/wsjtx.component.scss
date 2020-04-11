@@ -24,11 +24,11 @@
 }
 
 tr.isCQ {
-    background-color: #1EB2A6;
+    background-color: #1EB2A688;
 }
 
 tr.isMyCall {
-    background-color: #FFA34D;
+    background-color: #FFA34D88;
 }
 
 tr.lotwActivity {
@@ -47,4 +47,8 @@ td {
     p {
         margin-bottom: 0;
     }
+}
+
+table.mat-table {
+    width: 100%;
 }

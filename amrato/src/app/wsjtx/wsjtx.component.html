@@ -10,30 +10,47 @@
     <mat-checkbox [(ngModel)]="cqOnly">CQ Only</mat-checkbox>
 </div>
 
-<table class="table" *ngIf="status === 'connected'">
-    <thead>
-        <tr>
-            <th>UTC Time</th>
-            <th>dB</th>
-            <th>DT</th>
-            <th>Freq</th>
-            <th>Message</th>
-            <th>Distance</th>
-            <th>Azimuth</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let message of filteredMessages" 
-            [class.isCQ]="message.isCQ" 
-            [class.isMyCall]="message.toCall === mycall"
-            [class.lotwActivity]="hasLotwActivity(message)">
-            <td>{{message.timeString}}</td>
-            <td>{{message.snr.toFixed(0)}}</td>
-            <td>{{message.deltaTime.toFixed(1)}}</td>
-            <td>{{message.deltaFrequency.toFixed(0)}}</td>
-            <td>{{message.message}}</td>
-            <td>{{computeDistanceKm(message)}}</td>
-            <td>{{computeAzimuth(message)}}</td>
-        </tr>
-    </tbody>
+<table mat-table *ngIf="status === 'connected'" [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="timeString">
+        <th mat-header-cell *matHeaderCellDef>UTC Time</th>
+        <td mat-cell *matCellDef="let message">{{message.timeString}}</td>
+    </ng-container>
+    <ng-container matColumnDef="snr">
+        <th mat-header-cell *matHeaderCellDef>dB</th>
+        <td mat-cell *matCellDef="let message">{{message.snr.toFixed(0)}}</td>
+    </ng-container>
+    <ng-container matColumnDef="deltaTime">
+        <th mat-header-cell *matHeaderCellDef>DT</th>
+        <td mat-cell *matCellDef="let message">{{message.deltaTime.toFixed(1)}}</td>
+    </ng-container>
+    <ng-container matColumnDef="deltaFrequency">
+        <th mat-header-cell *matHeaderCellDef>Freq</th>
+        <td mat-cell *matCellDef="let message">{{message.deltaFrequency.toFixed(0)}}</td>
+    </ng-container>
+    <ng-container matColumnDef="message">
+        <th mat-header-cell *matHeaderCellDef>Message</th>
+        <td mat-cell *matCellDef="let message">{{message.message}}</td>
+    </ng-container>
+    <ng-container matColumnDef="distance">
+        <th mat-header-cell *matHeaderCellDef>Distance</th>
+        <td mat-cell *matCellDef="let message">{{computeDistanceKm(message)}}</td>
+    </ng-container>
+    <ng-container matColumnDef="azimuth">
+        <th mat-header-cell *matHeaderCellDef>Azimuth</th>
+        <td mat-cell *matCellDef="let message">{{computeAzimuth(message)}}</td>
+    </ng-container>
+    <ng-container matColumnDef="tags">
+        <th mat-header-cell *matHeaderCellDef>Tags</th>
+        <td mat-cell *matCellDef="let message">
+            <mat-chip-list>
+                <mat-chip *ngIf="hasLotwActivity(message)">LOTW</mat-chip>
+            </mat-chip-list>
+        </td>
+    </ng-container>
+    
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" 
+        [class.isCQ]="row.isCQ" 
+        [class.isMyCall]="row.toCall === mycall">
+    </tr>
 </table>
