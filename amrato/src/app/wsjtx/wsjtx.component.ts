@@ -2,11 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { Socket } from 'dgram';
 import * as moment from "moment";
+
 import MessageParser from './messages/MessageParser';
 import HeartbeatMessage from './messages/HeartbeatMessage';
 import { MessageType } from './messages/MessageType';
 import DecodeMessage from './messages/DecodeMessage';
 import { SettingsService } from '../services/settings.service';
+import { LotwService } from '../services/lotw.service';
 
 enum ListenerStatus {
     Disconnected = "disconnected",
@@ -31,17 +33,19 @@ export class WsjtxComponent implements OnInit, OnDestroy {
 
     messages: DecodeMessage[] = [];
 
-    constructor(private electronService: ElectronService, settingsService: SettingsService) { 
+    constructor(private electronService: ElectronService, settingsService: SettingsService, private lotwService: LotwService) { 
         this.mycall = settingsService.callsign;
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
+        this.lotwService.initialize();        
+
         const dgram = this.electronService.remote.require("dgram");
 
         const socket: Socket = dgram.createSocket("udp4");
         this.socket = socket;
         
-        socket.on('message', (msg, rinfo) => {
+        socket.on('message', async (msg, rinfo) => {
             if (msg.length < 4) {
                 return;
             }
@@ -68,7 +72,9 @@ export class WsjtxComponent implements OnInit, OnDestroy {
                 if (message.type === MessageType.Heartbeat) {
                     this.lastHeartbeat = message as HeartbeatMessage;
                 } else if (message.type === MessageType.Decode) {
-                    this.messages.splice(0, 0, message as DecodeMessage);
+                    const decodeMessage = message as DecodeMessage;
+                    decodeMessage.lastLotwActivity = await this.lastLotwActivity(decodeMessage);
+                    this.messages.splice(0, 0, decodeMessage);
                 }
             } else {
                 console.log("Unhandled WSJT-X Message", msg);
@@ -97,6 +103,20 @@ export class WsjtxComponent implements OnInit, OnDestroy {
         if (this.lastSeen && this.lastSeen < moment(now).subtract(30, 'seconds').toDate()) {
             this.status = ListenerStatus.Listening;
         }
+    }
+
+    async lastLotwActivity(message: DecodeMessage): Promise<Date | null> {
+        if (!message?.fromCall) {
+            return null;
+        }
+
+        return await this.lotwService.getUserLastActivity(message.fromCall);
+    }
+
+    hasLotwActivity(message: DecodeMessage): boolean {
+        return message.lastLotwActivity 
+            ? moment.utc(message.lastLotwActivity).toDate() > moment.utc().subtract(1, "year").toDate() 
+            : false;
     }
 
     get filteredMessages() {

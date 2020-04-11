@@ -47,6 +47,9 @@ export default class DecodeMessage extends NetworkMessage {
     public toCall?: string;
     public data?: DecodeMessageData;
 
+    // externally-settable
+    public lastLotwActivity?: Date;
+
     constructor(dataView: DataView) {
         super(dataView, MessageType.Decode);
 

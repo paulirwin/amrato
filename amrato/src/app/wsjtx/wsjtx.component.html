@@ -21,7 +21,10 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let message of filteredMessages" [class.isCQ]="message.isCQ" [class.isMyCall]="message.toCall === mycall">
+        <tr *ngFor="let message of filteredMessages" 
+            [class.isCQ]="message.isCQ" 
+            [class.isMyCall]="message.toCall === mycall"
+            [class.lotwActivity]="hasLotwActivity(message)">
             <td>{{message.timeString}}</td>
             <td>{{message.snr.toFixed(0)}}</td>
             <td>{{message.deltaTime.toFixed(1)}}</td>

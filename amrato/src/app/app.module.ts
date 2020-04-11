@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -46,6 +47,7 @@ import { SettingsComponent } from './settings/settings.component';
         FormsModule,
         ReactiveFormsModule,
         FlexLayoutModule,
+        HttpClientModule,
         MatSidenavModule,
         MatToolbarModule,
         MatIconModule,
