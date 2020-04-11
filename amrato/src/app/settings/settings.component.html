@@ -1,0 +1,10 @@
+<h2>Settings</h2>
+
+<mat-form-field>
+    <mat-label>Callsign</mat-label>
+    <input matInput type="text" maxlength="6" pattern="[A-Za-z0-9]{1,6}" [(ngModel)]="callsign" />
+</mat-form-field>
+
+<div class="action-row">
+    <button mat-raised-button color="primary" (click)="saveSettings($event)">Save Settings</button>
+</div>

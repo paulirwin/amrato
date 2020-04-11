@@ -22,3 +22,13 @@
 tr.isCQ {
     background-color: #1EB2A6;
 }
+
+.control-bar {
+    background-color: #eee;
+    border-radius: 0.5rem;
+    padding: 1rem;
+
+    p {
+        margin-bottom: 0;
+    }
+}

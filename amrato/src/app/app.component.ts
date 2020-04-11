@@ -9,11 +9,11 @@ import { version } from "../../package.json";
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    title = 'Amrato';
+    title = `Amrato v${version}`;
     version = version;
     datetime: string;
 
-    ngOnInit() {
+    ngOnInit() {        
         setInterval(this.updateDateTime.bind(this), 1000);
     }
 

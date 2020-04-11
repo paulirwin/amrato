@@ -3,6 +3,8 @@ import * as path from "path";
 import * as url from "url";
 import * as windowStateKeeper from "electron-window-state";
 
+import { version } from "./package.json";
+
 let win: BrowserWindow;
 
 function createWindow() {
@@ -18,6 +20,7 @@ function createWindow() {
         width: mainWindowState.width,
         height: mainWindowState.height,
         fullscreen: mainWindowState.isFullScreen,
+        title: `Amrato v${version}`,
         webPreferences: {
             nodeIntegration: true
         }

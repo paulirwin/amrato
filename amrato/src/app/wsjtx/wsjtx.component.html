@@ -1,8 +1,10 @@
 <h2>WSJT-X Companion</h2>
-<p>
-    <span [class.disconnected]="status === 'disconnected'" [class.listening]="status === 'listening'" [class.connected]="status === 'connected'" class="status-badge"></span>
-    {{statusString}}
-</p>
+<div class="control-bar">
+    <p>
+        <span [class.disconnected]="status === 'disconnected'" [class.listening]="status === 'listening'" [class.connected]="status === 'connected'" class="status-badge"></span>
+        {{statusString}}
+    </p>
+</div>
 
 <table class="table" *ngIf="status === 'connected'">
     <thead>

@@ -17,6 +17,10 @@
                 <mat-icon>language</mat-icon>
                 WSJT-X Companion
             </a>
+            <a mat-list-item routerLink="/settings" routerLinkActive="active">
+                <mat-icon>settings</mat-icon>
+                Settings
+            </a>
         </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content fxLayout="column" fxFlexFill>
@@ -25,7 +29,7 @@
                 <button type="button" mat-icon-button (click)="drawer.toggle()">
                     <mat-icon>menu</mat-icon>
                 </button>
-                Amrato v{{version}}
+                Amrato
             </div>
             <div class="flex-right">
                 {{datetime}}
