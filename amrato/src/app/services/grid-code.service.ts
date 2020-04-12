@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Maidenhead from "maidenhead";
+import Maidenhead from "@amrato/maidenhead-ts";
 
 export class DegreesMinutes {
     constructor(public degrees: number, public minutes: number, private isLongitude: boolean) {
