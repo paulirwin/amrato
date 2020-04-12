@@ -43,9 +43,14 @@ td {
     background-color: #eee;
     border-radius: 0.5rem;
     padding: 1rem;
+    display: flex;
 
-    p {
-        margin-bottom: 0;
+    div {
+        flex: 1 auto;
+
+        &.right {
+            text-align: right;
+        }
     }
 }
 

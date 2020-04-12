@@ -1,6 +1,7 @@
 import NetworkMessage from './NetworkMessage';
 import HeartbeatMessage from './HeartbeatMessage';
 import DecodeMessage from './DecodeMessage';
+import StatusMessage from './StatusMessage';
 
 export default class MessageParser {
     public static parse(dataView: DataView): NetworkMessage {
@@ -10,6 +11,8 @@ export default class MessageParser {
         switch (type) {
             case 0:
                 return new HeartbeatMessage(newDv);
+            case 1:
+                return new StatusMessage(newDv);
             case 2:
                 return new DecodeMessage(newDv);
         }

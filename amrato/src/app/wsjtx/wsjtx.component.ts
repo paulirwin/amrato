@@ -11,6 +11,9 @@ import { SettingsService } from '../services/settings.service';
 import { LotwService } from '../services/lotw.service';
 import { GridCodeService } from '../services/grid-code.service';
 import { MatTableDataSource } from '@angular/material/table';
+import StatusMessage, { WsjtxStatusOperation } from './messages/StatusMessage';
+import { frequencyHzToDisplayString, frequencyHzToBandString } from '../common/FrequencyUtils';
+import { BandPlanService } from '../services/band-plan.service';
 
 enum ListenerStatus {
     Disconnected = "disconnected",
@@ -29,6 +32,9 @@ export class WsjtxComponent implements OnInit, OnDestroy {
     status: ListenerStatus = ListenerStatus.Disconnected;
     lastSeen: Date;
     lastHeartbeat: HeartbeatMessage = null;
+    operation: WsjtxStatusOperation = null;
+    mode: string;
+    frequency: number | null = null;
 
     mycall: string;
     mygrid: string;
@@ -42,7 +48,8 @@ export class WsjtxComponent implements OnInit, OnDestroy {
     constructor(private electronService: ElectronService,
         settingsService: SettingsService,
         private lotwService: LotwService,
-        private gridCodeService: GridCodeService) {
+        private gridCodeService: GridCodeService,
+        private bandPlanService: BandPlanService) {
         this.mycall = settingsService.callsign;
         this.mygrid = settingsService.gridCode;
     }
@@ -88,6 +95,11 @@ export class WsjtxComponent implements OnInit, OnDestroy {
                     decodeMessage.lastLotwActivity = await this.lastLotwActivity(decodeMessage);
                     this.messages.splice(0, 0, decodeMessage);
                     this.dataSource.data = this.messages;
+                } else if (message.type === MessageType.Status) {
+                    const statusMessage = message as StatusMessage;
+                    this.operation = statusMessage.operation;
+                    this.mode = statusMessage.mode;
+                    this.frequency = statusMessage.dialFrequency;
                 }
             } else {
                 console.log("Unhandled WSJT-X Message", msg);
@@ -165,6 +177,14 @@ export class WsjtxComponent implements OnInit, OnDestroy {
             case ListenerStatus.Listening:
                 return "Waiting for UDP packets from WSJT-X...";
         }
+    }
+
+    get frequencyString(): string | null {
+        return this.frequency ? frequencyHzToDisplayString(this.frequency) : null;
+    }
+
+    get bandString(): string | null {
+        return this.frequency ? frequencyHzToBandString(this.bandPlanService.bands, this.frequency) : null;
     }
 
     get cqOnly() {

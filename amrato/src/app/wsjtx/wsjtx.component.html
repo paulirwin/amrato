@@ -1,9 +1,12 @@
 <h2>WSJT-X Companion</h2>
 <div class="control-bar">
-    <p>
+    <div class="left">
         <span [class.disconnected]="status === 'disconnected'" [class.listening]="status === 'listening'" [class.connected]="status === 'connected'" class="status-badge"></span>
         {{statusString}}
-    </p>
+    </div>
+    <div class="right" *ngIf="mode">
+        {{bandString}} {{mode}} {{frequencyString}}
+    </div>
 </div>
 
 <div class="filters">

@@ -191,6 +191,6 @@ export default class DecodeMessage extends NetworkMessage {
     }
 
     toString() {
-        return `Decode: id ${this.id} ${this.new ? 'new' : 'not-new'} ${this.timeString} ${this.snr.toFixed(0)}dB ${this.mode} ${this.message}`;
+        return `Decode: ${this.new ? 'new' : 'not-new'} ${this.timeString} ${this.snr.toFixed(0)}dB ${this.mode} ${this.message}`;
     }
 }
