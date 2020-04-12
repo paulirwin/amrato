@@ -19,8 +19,10 @@
                         (click)="openUrlInBrowser($event)">this link</a>. You need only register once for each band.</p>
                 <p *ngIf="band.note" class="band-note">{{band.note}}</p>
 
-                <app-stacked-band *ngIf="band.segments.length > 0 && band.displayMode === 'stacked-band'" [band]="band">
-                </app-stacked-band>
+                <div *ngIf="band.segments.length">
+                    <app-stacked-band *ngIf="band.displayMode === 'stacked-band'" [band]="band"></app-stacked-band>
+                    <app-complex-band *ngIf="band.displayMode === 'complex-band'" [band]="band"></app-complex-band>
+                </div>
             </mat-card-content>
         </mat-card>
         <mat-card>
@@ -106,5 +108,6 @@
                 </dl>
             </mat-card-content>
         </mat-card>
+        <p>Content Copyright &copy; ARRL 2017</p>
     </div>
 </div>

@@ -1,0 +1,14 @@
+<div class="band-plan-graphic complex-band">
+    <div *ngFor="let row of rows">
+        <div class="band-complex-row">
+            <div class="band-complex-segments">
+                <div class="band-complex-segment band-plan-key" *ngFor="let segment of row.segments" [ngClass]="segment.type" [title]="bandPlanService.segmentTypeLegend[segment.type]"></div>
+            </div>
+            <div class="license-classes">{{row.licenseClasses.join(",")}}</div>
+        </div>
+        <div class="freq-indicators">
+            <span class="start-freq">{{row.startFreqString}}</span>
+            <span class="end-freq">{{row.endFreqString}}</span>
+        </div>
+    </div>
+</div>

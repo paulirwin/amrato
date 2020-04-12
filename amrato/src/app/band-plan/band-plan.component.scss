@@ -24,7 +24,7 @@ table.high-freq-table {
     }
 
     .band-legend {
-        width: 20rem;
+        min-width: 20rem;
 
         mat-card-content {
             padding: 1rem;

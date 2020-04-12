@@ -61,6 +61,8 @@ export interface BandSegment {
     note?: string;
 }
 
+const uhfNote = "Geographical and power restrictions may apply to all bands above 420MHz. See The ARRL Operating Manual for information about your area.";
+
 const bands: Band[] = [
     {
         meters: 2200,
@@ -187,6 +189,7 @@ const bands: Band[] = [
         meters: 60,
         displayName: "60 Meters (5.3 MHz)",
         displayMode: DisplayMode.ChannelBand,
+        note: "General, Advanced, and Amateur Extra licensees may operate on these five channels on a secondary basis with a maximum effective radiated power (ERP) of 100 W PEP relative to a half-wave dipole. Permitted operating modes include upper sideband voice (USB), CW, RTTY, PSK31 and other digital modes such as PACTOR III. Only one signal at a time is permitted on any channel.",
         startFreqMhz: 5.3305,
         endFreqMhz: 5.4065,
         segments: [
@@ -434,6 +437,7 @@ const bands: Band[] = [
         meters: 0.7,
         displayName: "70 cm (420 MHz)",
         displayMode: DisplayMode.StackedBand,
+        note: uhfNote,
         startFreqMhz: 420,
         endFreqMhz: 450,
         segments: [
@@ -455,6 +459,7 @@ const bands: Band[] = [
         meters: 0.33,
         displayName: "33 cm (902 MHz)",
         displayMode: DisplayMode.StackedBand,
+        note: uhfNote,
         startFreqMhz: 902,
         endFreqMhz: 928,
         segments: [
@@ -476,6 +481,7 @@ const bands: Band[] = [
         meters: 0.23,
         displayName: "23 cm (1240 MHz)",
         displayMode: DisplayMode.ComplexStackedBand,
+        note: uhfNote,
         startFreqMhz: 1240,
         endFreqMhz: 1300,
         segments: [

@@ -29,6 +29,7 @@ import { StackedBandComponent } from './band-plan/stacked-band/stacked-band.comp
 import { MapViewComponent } from './map-view/map-view.component';
 import { WsjtxComponent } from './wsjtx/wsjtx.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ComplexBandComponent } from './band-plan/complex-band/complex-band.component';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { SettingsComponent } from './settings/settings.component';
         StackedBandComponent,
         MapViewComponent,
         WsjtxComponent,
-        SettingsComponent
+        SettingsComponent,
+        ComplexBandComponent
     ],
     imports: [
         NgxElectronModule,
