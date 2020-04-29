@@ -2,14 +2,28 @@
 
 <mat-form-field>
     <mat-label>My Callsign</mat-label>
-    <input matInput type="text" maxlength="6" pattern="[A-Za-z0-9]{1,6}" [(ngModel)]="callsign" />
+    <input matInput type="text" maxlength="6" pattern="[A-Za-z0-9]{1,6}" [(ngModel)]="callsign" (ngModelChange)="onModelChange()" />
 </mat-form-field>
 
 <mat-form-field>
     <mat-label>My Grid Code</mat-label>
-    <input matInput type="text" maxlength="6" pattern="[A-Za-z]{2}[0-9]{2}([A-Za-z]{2})?" [(ngModel)]="gridCode" />
+    <input matInput type="text" maxlength="6" pattern="[A-Za-z]{2}[0-9]{2}([A-Za-z]{2})?" [(ngModel)]="gridCode" (ngModelChange)="onModelChange()" />
+</mat-form-field>
+
+<div style="margin-bottom: 1rem;">
+    <mat-checkbox [(ngModel)]="enableQrzXml" (ngModelChange)="onModelChange()">Enable <a href="https://www.qrz.com/page/xml_data.html" (click)="openUrlInBrowser($event)">QRZ.com XML Data</a> (Requires Subscription)</mat-checkbox>
+</div>
+
+<mat-form-field>
+    <mat-label>QRZ.com Username</mat-label>
+    <input matInput type="text" [(ngModel)]="qrzUsername" (ngModelChange)="onModelChange()" [disabled]="!enableQrzXml" />
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>QRZ.com Password</mat-label>
+    <input matInput type="password" [(ngModel)]="qrzPassword" (ngModelChange)="onModelChange()" [disabled]="!enableQrzXml" />
 </mat-form-field>
 
 <div class="action-row">
-    <button mat-raised-button color="primary" (click)="saveSettings($event)">Save Settings</button>
+    <button mat-raised-button color="primary" (click)="saveSettings($event)" [disabled]="!dirty">Save Settings</button>
 </div>

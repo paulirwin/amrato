@@ -42,6 +42,14 @@
         <th mat-header-cell *matHeaderCellDef>Azimuth</th>
         <td mat-cell *matCellDef="let message">{{computeAzimuth(message)}}</td>
     </ng-container>
+    <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef>State</th>
+        <td mat-cell *matCellDef="let message">{{message.qrzXmlData?.state}}</td>
+    </ng-container>
+    <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef>Country</th>
+        <td mat-cell *matCellDef="let message">{{message.qrzXmlData?.land}}</td>
+    </ng-container>
     <ng-container matColumnDef="tags">
         <th mat-header-cell *matHeaderCellDef>Tags</th>
         <td mat-cell *matCellDef="let message">

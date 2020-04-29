@@ -2,6 +2,7 @@ import * as moment from "moment";
 
 import NetworkMessage from './NetworkMessage';
 import { MessageType } from './MessageType';
+import { XmlCallsignLookupResult } from '../../services/qrz-xml.service';
 
 export enum DecodeMessageType {
     Unknown = "Unknown",
@@ -49,6 +50,7 @@ export default class DecodeMessage extends NetworkMessage {
 
     // externally-settable
     public lastLotwActivity?: Date;
+    public qrzXmlData?: XmlCallsignLookupResult;
 
     constructor(dataView: DataView) {
         super(dataView, MessageType.Decode);

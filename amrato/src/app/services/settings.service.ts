@@ -22,4 +22,28 @@ export class SettingsService {
     set gridCode(value: string) {
         localStorage.setItem("gridCode", value);
     }
+
+    get enableQrzXml(): boolean {
+        return localStorage.getItem("enableQrzXml") === "true";
+    }
+
+    set enableQrzXml(value: boolean) {
+        localStorage.setItem("enableQrzXml", value.toString());
+    }
+
+    get qrzUsername(): string {
+        return localStorage.getItem("qrzUsername");
+    }
+
+    set qrzUsername(value: string) {
+        localStorage.setItem("qrzUsername", value);
+    }
+
+    get qrzPassword(): string {
+        return localStorage.getItem("qrzPassword");
+    }
+
+    set qrzPassword(value: string) {
+        localStorage.setItem("qrzPassword", value);
+    }
 }

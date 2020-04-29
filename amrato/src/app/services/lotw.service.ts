@@ -18,7 +18,7 @@ export class LotwService {
     async initialize() {
         const lastSync = this.lastUserActivitySync;
 
-        if (!lastSync || moment.utc(lastSync).toDate() < moment.utc().subtract(1, "day").toDate()) {
+        if (!lastSync || moment.utc(lastSync).toDate() < moment.utc().subtract(7, "days").toDate()) {
             await this.loadUserActivity();
         }
 

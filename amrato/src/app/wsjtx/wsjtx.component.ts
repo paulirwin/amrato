@@ -14,6 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import StatusMessage, { WsjtxStatusOperation } from './messages/StatusMessage';
 import { frequencyHzToDisplayString, frequencyHzToBandString } from '../common/FrequencyUtils';
 import { BandPlanService } from '../services/band-plan.service';
+import { QrzXmlService } from '../services/qrz-xml.service';
 
 enum ListenerStatus {
     Disconnected = "disconnected",
@@ -39,22 +40,29 @@ export class WsjtxComponent implements OnInit, OnDestroy {
     mycall: string;
     mygrid: string;
     private _cqOnly: boolean = false;
+    enableQrzData: boolean;
 
     messages: DecodeMessage[] = [];
     dataSource = new MatTableDataSource<DecodeMessage>();
 
-    displayedColumns = ["timeString", "snr", "deltaTime", "deltaFrequency", "message", "distance", "azimuth", "tags"];
+    displayedColumns = ["timeString", "snr", "deltaTime", "deltaFrequency", "message", "distance", "azimuth", "state", "country", "tags"];
 
     constructor(private electronService: ElectronService,
         settingsService: SettingsService,
         private lotwService: LotwService,
         private gridCodeService: GridCodeService,
-        private bandPlanService: BandPlanService) {
+        private bandPlanService: BandPlanService,
+        private qrzXmlService: QrzXmlService) {
         this.mycall = settingsService.callsign;
         this.mygrid = settingsService.gridCode;
+        this.enableQrzData = settingsService.enableQrzXml;
     }
 
     async ngOnInit() {
+        if (this.enableQrzData) {
+            await this.qrzXmlService.login();
+        }
+
         this.dataSource.filterPredicate = (data, filter) => !this.cqOnly || data.isCQ;        
 
         this.lotwService.initialize();
@@ -92,7 +100,12 @@ export class WsjtxComponent implements OnInit, OnDestroy {
                     this.lastHeartbeat = message as HeartbeatMessage;
                 } else if (message.type === MessageType.Decode) {
                     const decodeMessage = message as DecodeMessage;
-                    decodeMessage.lastLotwActivity = await this.lastLotwActivity(decodeMessage);
+                    this.loadLastLotwActivity(decodeMessage);
+                    
+                    if (this.enableQrzData) {
+                        this.loadQrzData(decodeMessage);
+                    }
+                    
                     this.messages.splice(0, 0, decodeMessage);
                     this.dataSource.data = this.messages;
                 } else if (message.type === MessageType.Status) {
@@ -130,12 +143,24 @@ export class WsjtxComponent implements OnInit, OnDestroy {
         }
     }
 
-    async lastLotwActivity(message: DecodeMessage): Promise<Date | null> {
+    async loadQrzData(message: DecodeMessage): Promise<void> {
         if (!message?.fromCall) {
-            return null;
+            return;
         }
 
-        return await this.lotwService.getUserLastActivity(message.fromCall);
+        try {
+            message.qrzXmlData = await this.qrzXmlService.callsignLookup(message.fromCall);
+        } catch (e) {
+            console.error("Error from QRZ.com XML data: " + e.error);
+        }
+    }
+
+    async loadLastLotwActivity(message: DecodeMessage): Promise<void> {
+        if (!message?.fromCall) {
+            return;
+        }
+
+        message.lastLotwActivity = await this.lotwService.getUserLastActivity(message.fromCall);
     }
 
     hasLotwActivity(message: DecodeMessage): boolean {
