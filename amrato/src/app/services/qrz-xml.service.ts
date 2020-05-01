@@ -83,7 +83,7 @@ export class QrzXmlService {
         if (cachedJson) {
             const cachedData = JSON.parse(cachedJson) as CachedCallsignData;
 
-            if (cachedData.updated && moment.utc(cachedData.updated).toDate() > moment.utc().subtract(7, "days").toDate()) {
+            if (cachedData.updated && moment.utc(cachedData.updated).toDate() > moment.utc().subtract(30, "days").toDate()) {
                 return cachedData.data;
             }
         }
@@ -91,6 +91,8 @@ export class QrzXmlService {
         if (!this.sessionKey) {
             await this.login();
         }
+
+        console.debug(`Loading callsign data from QRZ.com XML data for ${callsign}...`);
 
         const xml = await this.http.get(HTTP_URL, {
             params: {
@@ -101,28 +103,34 @@ export class QrzXmlService {
         }).toPromise();
 
         const doc = this.parseXml(xml);
+        let isNotFound = false;
 
         try {
             this.checkForError(doc); 
         } catch (e) {
-            if (e.error.toLowerCase() === "session timeout" && !retrying) {
+            if (e.error.toLowerCase().startsWith("not found")) {
+                isNotFound = true;
+            } else if ((e.error.toLowerCase() === "session timeout" 
+                || e.error.toLowerCase() == "invalid session key") && !retrying) {
                 this.sessionKey = null;
                 return await this.callsignLookup(callsign, true);                
+            } else {
+                throw e;
             }
-
-            throw e;
         }        
 
-        console.debug(`Loading callsign data from QRZ.com XML data for ${callsign}...`);
+        let result: XmlCallsignLookupResult = null;
 
-        const el = doc.documentElement.querySelector("Callsign");
+        if (!isNotFound) {
+            const el = doc.documentElement.querySelector("Callsign");
 
-        const result: XmlCallsignLookupResult = {
-            call: this.getText(el, "call"),
-            country: this.getText(el, "country"),
-            land: this.getText(el, "land"),
-            state: this.getText(el, "state"),
-        };
+            result = {
+                call: this.getText(el, "call"),
+                country: this.getText(el, "country"),
+                land: this.getText(el, "land"),
+                state: this.getText(el, "state"),
+            };
+        }
 
         cachedJson = JSON.stringify(<CachedCallsignData>{ 
             updated: moment.utc().toDate().toISOString(),
@@ -131,7 +139,7 @@ export class QrzXmlService {
 
         localStorage.setItem(cacheKey, cachedJson);
 
-        console.debug(`Successfully loaded callsign data from QRZ.com XML data for ${callsign}`);
+        console.debug(isNotFound ? `Callsign data not found on QRZ.com for ${callsign}` : `Successfully loaded callsign data from QRZ.com XML data for ${callsign}`);
 
         return result;
     }

@@ -176,6 +176,10 @@ export class WsjtxComponent implements OnInit, OnDestroy {
 
         const dist = this.gridCodeService.computeDistanceKm(this.mygrid, message.data.value as string);
 
+        if (dist === null) {
+            return "";
+        }
+
         return dist.toFixed(0) + " km";
     }
 
@@ -185,6 +189,10 @@ export class WsjtxComponent implements OnInit, OnDestroy {
         }
 
         const az = this.gridCodeService.computeAzimuth(this.mygrid, message.data.value as string);
+
+        if (az === null) {
+            return "";
+        }
 
         return az.toFixed(0) + "°";
     }

@@ -38,14 +38,22 @@ export class GridCodeService {
         return new Coordinates(DegreesMinutes.fromDecimal(lon, true), DegreesMinutes.fromDecimal(lat, false));
     }
 
-    computeDistanceKm(fromGridCode: string, toGridCode: string): number {
+    computeDistanceKm(fromGridCode: string, toGridCode: string): number | null {
+        if (typeof fromGridCode !== "string" || typeof toGridCode !== "string") {
+            return null;
+        }
+
         const from = Maidenhead.fromLocator(fromGridCode);
         const to = Maidenhead.fromLocator(toGridCode);
 
         return from.distanceTo(to, "km");
     }
 
-    computeAzimuth(fromGridCode: string, toGridCode: string): number {
+    computeAzimuth(fromGridCode: string, toGridCode: string): number | null {
+        if (typeof fromGridCode !== "string" || typeof toGridCode !== "string") {
+            return null;
+        }
+        
         const from = Maidenhead.fromLocator(fromGridCode);
         const to = Maidenhead.fromLocator(toGridCode);
 
