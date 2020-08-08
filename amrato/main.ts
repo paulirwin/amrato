@@ -49,6 +49,8 @@ function createWindow() {
     });
 }
 
+app.allowRendererProcessReuse = true;
+
 app.on("ready", createWindow);
 
 // on macOS, closing the window doesn't quit the app
