@@ -62,7 +62,7 @@ export class LotwService {
                     const time = record.data[2];
 
                     dbRecords.push({
-                        callsign: record.data[0],
+                        callsign: record.data[0] as string,
                         dt: new Date(`${date}T${time}Z`)
                     });
                 },
